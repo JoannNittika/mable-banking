@@ -3,3 +3,6 @@ class InsufficientFundsError(Exception):
 
 class InvalidAmountError(ValueError):
     """Raised when an amount is not a positive Decimal."""
+
+class InvalidAccountNumberError(ValueError):
+    """Raised when an account number is not exactly 16 digits."""
