@@ -6,3 +6,6 @@ class InvalidAmountError(ValueError):
 
 class InvalidAccountNumberError(ValueError):
     """Raised when an account number is not exactly 16 digits."""
+
+class InvalidTransferError(ValueError):
+    """Raised when a transfer is malformed, e.g. to the same account."""
