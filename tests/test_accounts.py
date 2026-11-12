@@ -7,7 +7,7 @@ from mable.errors import InsufficientFundsError
 
 def test_account_has_number_and_balance():
     account = Account("1111234522226789", Decimal("5000.00"))
-    assert account.number == "1111234522226789"
+    assert account.act_num == "1111234522226789"
     assert account.balance == Decimal("5000.00")
 
 def test_increase_balance_after_deposit():
@@ -16,7 +16,7 @@ def test_increase_balance_after_deposit():
     assert account.balance == Decimal("5055.55")
 
 def test_decrease_balance_after_withdrawal():
-    account = Account("1111234522226789", Decimal("5000.00"))
+    account = Account("1111234522226789", Decimal("5055.55"))
     account.withdraw(Decimal("55.55"))
     assert account.balance == Decimal("5000.00")
 
