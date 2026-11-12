@@ -1,5 +1,7 @@
 from decimal import Decimal
-from mable.errors import InsufficientFundsError
+from idlelib import statusbar
+
+from mable.errors import InsufficientFundsError, InvalidAmountError
 
 class Account:
     def __init__(self, act_num: str, balance: Decimal) -> None:
@@ -15,3 +17,8 @@ class Account:
                 f"Account {self.number} has {self.balance}, cannot withdraw {amount}"
             )
         self.balance -= amount
+
+    @staticmethod
+    def validate_amount(amount: Decimal)-> None:
+        if not isinstance(amount, Decimal) or amount <=0:
+            raise InvalidAmountError(f"{amount} is invalid. Amount must be a positive Decimal")
