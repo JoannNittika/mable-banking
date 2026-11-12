@@ -9,9 +9,11 @@ class Account:
         self.balance = balance
 
     def deposit(self, amount: Decimal)-> None:
+        self.validate_amount(amount)
         self.balance += amount
 
     def withdraw(self, amount: Decimal) -> None:
+        self.validate_amount(amount)
         if amount > self.balance:
             raise InsufficientFundsError(
                 f"Account {self.number} has {self.balance}, cannot withdraw {amount}"
