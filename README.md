@@ -22,8 +22,34 @@ tests/          Unit tests for each module, plus end-to-end tests
 data/           Sample input CSV files
 ```
 
+### Running without uv (plain Python)
+The program has no runtime dependencies. Run these commands from the project root.
+
+```bash
+
+# Install the dev tools
+python3 -m pip install pytest pytest-cov ruff
+
+# Run the program
+PYTHONPATH=src python3 -m mable      # Windows PowerShell: $env:PYTHONPATH="src"; python -m mable
+
+# Tests
+python3 -m pytest
+
+# Code coverage
+python3 -m pytest --cov=mable --cov-report=term-missing
+python3 -m pytest --cov=mable --cov-report=html      # open htmlcov/index.html
+
+# Ruff
+python3 -m ruff check .
+python3 -m ruff check . --fix
+python3 -m ruff format .
+```
+
+`PYTHONPATH=src` tells Python where the `mable` package lives. pytest doesn't need it, because `pyproject.toml` sets `pythonpath = ["src"]`.
+
 ## Setup and running
-Requires Python 3.10+ and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.10+ and [uv](https://docs.astral.sh/uv/) [optional].
 
 ```bash
 uv sync                      # create the virtual env and install dependencies
@@ -61,6 +87,8 @@ The files have no header row.
 
 ## Assumptions
 - **Money:** Amounts are stored as `Decimal`, never as `float`, to avoid rounding errors.
+- **Account** An account cannot be overdrawn and a transaction leading to a negative account balance is rejected.
+- **Transactions** Transactions in the CSV are assumed to be listed in chronological order, reflecting the order in which they occurred.
 - **Decimal places:** Amounts must have at most 2 decimal places. Anything with more is rejected rather than rounded, because a bank should never quietly change the money it was given. A value like `1.230` is accepted because it's still a whole number of cents.
 - **Invalid amounts:** `NaN`, `Infinity` and negative amounts are rejected.
 - **Zero:** A zero amount is allowed for an opening balance but not for a transfer.
