@@ -66,3 +66,20 @@ def test_rejects_invalid_opening_balance(bad):
     with pytest.raises(InvalidAmountError):
         Account("1111234522226789", bad)
 
+#-----------------------Testing non-finite and over-precise amounts-------------------------
+
+@pytest.mark.parametrize("bad", [Decimal("NaN"), Decimal("Infinity"), Decimal("1.234")])
+def test_rejects_non_finite_or_over_precise_opening_balance(bad):
+    with pytest.raises(InvalidAmountError):
+        Account("1111234522226789", bad)
+
+
+@pytest.mark.parametrize("bad", [Decimal("NaN"), Decimal("Infinity"), Decimal("0.005")])
+def test_deposit_and_withdraw_reject_non_finite_or_over_precise_amounts(bad):
+    account = Account("1111234522226789", Decimal("100.00"))
+    with pytest.raises(InvalidAmountError):
+        account.deposit(bad)
+    with pytest.raises(InvalidAmountError):
+        account.withdraw(bad)
+    assert account.balance == Decimal("100.00")
+

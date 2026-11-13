@@ -12,3 +12,6 @@ class InvalidTransferError(ValueError):
 
 class AccountNotFoundError(KeyError):
     """Raised when a transfer names an account the bank doesn't hold."""
+
+class DuplicateAccountError(ValueError):
+    """Raised when the same account number is loaded into a bank twice."""

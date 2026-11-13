@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
-from mable.errors import InvalidAmountError, InvalidTransferError
+from mable.errors import InvalidTransferError
+from mable.money import validate_money
 
 from dataclasses import dataclass
 
@@ -13,10 +14,7 @@ class Transfer:
     amount: Decimal
 
     def __post_init__(self) -> None:
-        if not isinstance(self.amount, Decimal) or self.amount <= 0:
-            raise InvalidAmountError(
-                f"Amount for transfer is {self.amount}. Amount must be positive, non-zero decimal value"
-            )
+        validate_money(self.amount, label="Transfer amount")
         if self.from_acc == self.to_acc:
             raise InvalidTransferError(
                 f"You  cannot transfer from the same account"

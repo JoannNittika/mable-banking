@@ -1,6 +1,7 @@
 from decimal import Decimal
 
-from mable.errors import InsufficientFundsError, InvalidAmountError, InvalidAccountNumberError
+from mable.errors import InsufficientFundsError, InvalidAccountNumberError
+from mable.money import validate_money
 
 class Account:
     NUMBER_LENGTH = 16
@@ -32,10 +33,8 @@ class Account:
 
     @staticmethod
     def validate_opening_balance(balance: Decimal) -> None:
-        if not isinstance(balance, Decimal) or balance < 0:
-            raise InvalidAmountError(f"Opening balance must be a Decimal >= 0, got {balance!r}")
+        validate_money(balance, allow_zero=True, label="Opening balance")
 
     @staticmethod
-    def validate_amount(amount: Decimal)-> None:
-        if not isinstance(amount, Decimal) or amount <=0:
-            raise InvalidAmountError(f"{amount} is invalid. Amount must be a positive Decimal")
+    def validate_amount(amount: Decimal) -> None:
+        validate_money(amount)

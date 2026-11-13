@@ -2,14 +2,20 @@ from decimal import Decimal
 
 from mable.account import Account
 from mable.transfer import Transfer
-from mable.errors import AccountNotFoundError, InsufficientFundsError
+from mable.errors import AccountNotFoundError, DuplicateAccountError, InsufficientFundsError
 
 
 class Bank:
     def __init__(self, accounts: list[Account]) -> None:
-        self.accounts = {account.act_num: account for account in accounts }
-
+        self.accounts: dict[str, Account] = {}
+        for account in accounts:
+            self._add_account(account)
         self.completed_transfers: list[Transfer] = []
+
+    def _add_account(self, account: Account) -> None:
+        if account.act_num in self.accounts:
+            raise DuplicateAccountError(f"Account {account.act_num} appears more than once")
+        self.accounts[account.act_num] = account
 
     #Mainly used in testing
     def balance_of(self, number: str) -> Decimal:
