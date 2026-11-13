@@ -47,5 +47,4 @@ class Bank:
         try:
             return self._accounts[act_num]
         except KeyError:
-            # Raises a clear banking error instead of a raw KeyError
-            raise AccountNotFoundError(act_num) from None
+            raise AccountNotFoundError(f"Unknown account {act_num!r}") from None

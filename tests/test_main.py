@@ -11,8 +11,8 @@ def test_main_prints_final_balances(capsys):
     main(ACCOUNTS, TRANSFERS)
     out = capsys.readouterr().out
 
-    assert "Final balances:" in out
-    for balance in ["4820.50", "9974.40", "1550.00", "1725.60", "48679.50"]:
+    assert "Final balances" in out
+    for balance in ["4,820.50", "9,974.40", "1,550.00", "1,725.60", "48,679.50"]:
         assert balance in out
 
 
@@ -20,8 +20,8 @@ def test_main_prints_completed_transfers(capsys):
     main(ACCOUNTS, TRANSFERS)
     out = capsys.readouterr().out
 
-    assert "Completed:" in out
-    assert out.count("Transfer(") == 4
+    assert "Completed transfers" in out
+    assert "4 completed, 0 failed" in out
 
 
 def test_main_prints_failed_transfers(tmp_path, capsys):
@@ -33,5 +33,5 @@ def test_main_prints_failed_transfers(tmp_path, capsys):
     main(accounts, transfers)
     out = capsys.readouterr().out
 
-    assert "Failed:" in out
-    assert "->" in out
+    assert "Failed transfers" in out
+    assert "0 completed, 1 failed" in out
