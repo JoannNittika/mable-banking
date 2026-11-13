@@ -1,11 +1,16 @@
+from pathlib import Path
+
 from mable.bank import Bank
 from mable.loader import load_accounts, load_transfers
 
 
-def main() -> None:
-    accounts = load_accounts("data/mable_account_balances.csv")
+def main(
+    accounts_path: str | Path = "data/mable_account_balances.csv",
+    transfers_path: str | Path = "data/mable_transactions.csv",
+) -> None:
+    accounts = load_accounts(accounts_path)
     bank = Bank(accounts)
-    bank.process(load_transfers("data/mable_transactions.csv"))
+    bank.process(load_transfers(transfers_path))
 
     print("Completed:")
     for transfer in bank.completed_transfers:
@@ -18,5 +23,5 @@ def main() -> None:
         print(f"  {account.act_num}: {account.balance:.2f}")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     main()
