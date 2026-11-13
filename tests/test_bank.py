@@ -4,7 +4,7 @@ import pytest
 
 from mable.account import Account
 from mable.bank import Bank
-from mable.errors import AccountNotFoundError, InsufficientFundsError
+from mable.errors import AccountNotFoundError, DuplicateAccountError, InsufficientFundsError
 from mable.transfer import Transfer
 
 A = "1234567890123456"
@@ -43,3 +43,7 @@ def test_process_applies_in_order_and_collects_failures(bank):
     assert len(failures) == 1
     assert failures[0][0] == bad
     assert isinstance(failures[0][1], InsufficientFundsError)
+
+def test_rejects_duplicate_account_numbers():
+    with pytest.raises(DuplicateAccountError):
+        Bank([Account(A, Decimal("5.00")), Account(A, Decimal("7.00"))])

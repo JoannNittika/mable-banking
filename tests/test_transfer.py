@@ -29,3 +29,8 @@ def test_rejects_invalid_amount(bad):
 def test_rejects_transfer_to_same_account():
     with pytest.raises(InvalidTransferError):
         Transfer(FROM, FROM, Decimal("10.00"))
+
+@pytest.mark.parametrize("bad", [Decimal("NaN"), Decimal("Infinity"), Decimal("320.505")])
+def test_rejects_non_finite_or_over_precise_amount(bad):
+    with pytest.raises(InvalidAmountError):
+        Transfer(FROM, TO, bad)
