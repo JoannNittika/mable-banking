@@ -1,16 +1,41 @@
+from decimal import Decimal
+
 from mable.account import Account
 from mable.transfer import Transfer
+from mable.errors import AccountNotFoundError, InsufficientFundsError
 
 
 class Bank:
     def __init__(self, accounts: list[Account]) -> None:
-        raise NotImplementedError
+        self.accounts = {account.act_num: account for account in accounts }
 
-    def balance_of(self, number: str):
-        raise NotImplementedError
+        self.completed_transfers: list[Transfer] = []
+
+    #Mainly used in testing
+    def balance_of(self, number: str) -> Decimal:
+            return self.get_account(number).balance
 
     def apply(self, transfer: Transfer) -> None:
-        raise NotImplementedError
+        src = self.get_account(transfer.from_acc)
+        target = self.get_account(transfer.to_acc)
+        #Raises error when failed
+        src.withdraw(transfer.amount)
+        target.deposit(transfer.amount)
+        #Only successful transactions with no errors raised is added to the list
+        self.completed_transfers.append(transfer)
 
-    def process(self, transfers: list[Transfer]) -> list[tuple[Transfer, Exception]]:
-        raise NotImplementedError
+    def process(self, transfers: list[Transfer]) -> list[tuple[Transfer, Exception]] | None:
+        failures: list[tuple[Transfer, Exception]] = []
+        for transfer in transfers:
+            try:
+                self.apply(transfer)
+            except (AccountNotFoundError, InsufficientFundsError) as error:
+                failures.append((transfer, error))
+        return failures
+
+    def get_account(self, act_num: str)-> Account:
+        try:
+            return self.accounts[act_num]
+        except:
+            #Raises a clear banking error instead of a raw KeyError
+            raise AccountNotFoundError(act_num) from None
