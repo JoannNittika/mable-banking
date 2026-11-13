@@ -28,9 +28,28 @@ Requires Python 3.10+ and [uv](https://docs.astral.sh/uv/).
 ```bash
 uv sync                      # create the virtual env and install dependencies
 uv run python -m mable       # run against the files in data/
+
+### Tests
 uv run pytest                # run all tests
 uv run pytest -v             # verbose test output
 ```
+
+### Code coverage
+Coverage is measured with `pytest-cov`.
+```bash
+uv run pytest --cov=mable --cov-report=term-missing   # summary in the terminal
+uv run pytest --cov=mable --cov-report=html           # HTML report in htmlcov/index.html
+```
+The `Missing` column lists any lines no test runs. The project is currently at **100% line coverage**. The `if __name__ == "__main__":` line is excluded with `# pragma: no cover`, because it only runs from the command line.
+
+### Linting and formatting (Ruff)
+Ruff is configured in `pyproject.toml`.
+```bash
+uv run ruff check .          # lint
+uv run ruff check . --fix    # auto-fix what it can
+uv run ruff format .         # format the code
+```
+The codebase currently passes `ruff check` with no findings.
 
 Run the commands from the project root, the folder that contains `data/`.
 
