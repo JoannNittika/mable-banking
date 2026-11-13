@@ -22,6 +22,8 @@ tests/          Unit tests for each module, plus end-to-end tests
 data/           Sample input CSV files
 ```
 
+## Setup and running
+
 ### Running without uv (plain Python)
 The program has no runtime dependencies. Run these commands from the project root.
 
@@ -48,7 +50,7 @@ python3 -m ruff format .
 
 `PYTHONPATH=src` tells Python where the `mable` package lives. pytest doesn't need it, because `pyproject.toml` sets `pythonpath = ["src"]`.
 
-## Setup and running
+### Running uv
 Requires Python 3.10+ and [uv](https://docs.astral.sh/uv/) [optional].
 
 ```bash
