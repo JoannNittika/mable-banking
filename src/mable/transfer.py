@@ -5,6 +5,7 @@ from mable.errors import InvalidTransferError
 from mable.money import validate_money
 
 
+#Transfer: immutable record of one transfer
 @dataclass(frozen=True)
 class Transfer:
     from_acc: str

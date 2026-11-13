@@ -8,25 +8,26 @@ class Account:
     NUMBER_LENGTH = 16
 
     def __init__(self, act_num: str, balance: Decimal) -> None:
-        self.validate_number(act_num)
-        self.validate_opening_balance(balance)
+        self._validate_account_number(act_num)
+        self._validate_opening_balance(balance)
         self.act_num = act_num
         self.balance = balance
 
     def deposit(self, amount: Decimal) -> None:
-        self.validate_amount(amount)
+        self._validate_amount(amount)
         self.balance += amount
 
     def withdraw(self, amount: Decimal) -> None:
-        self.validate_amount(amount)
+        self._validate_amount(amount)
         if amount > self.balance:
             raise InsufficientFundsError(
                 f"Account {self.act_num} has {self.balance}, cannot withdraw {amount}"
             )
         self.balance -= amount
 
+    #private methods
     @classmethod
-    def validate_number(cls, act_num: str) -> None:
+    def _validate_account_number(cls, act_num: str) -> None:
         if (
             not isinstance(act_num, str)
             or len(act_num) != cls.NUMBER_LENGTH
@@ -37,9 +38,9 @@ class Account:
             )
 
     @staticmethod
-    def validate_opening_balance(balance: Decimal) -> None:
+    def _validate_opening_balance(balance: Decimal) -> None:
         validate_money(balance, allow_zero=True, label="Opening balance")
 
     @staticmethod
-    def validate_amount(amount: Decimal) -> None:
+    def _validate_amount(amount: Decimal) -> None:
         validate_money(amount)
