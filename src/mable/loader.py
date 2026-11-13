@@ -22,7 +22,6 @@ def _read_rows(path) -> list[list[str]]:
         rows = [[cell.strip() for cell in row] for row in csv.reader(file)]
     return [row for row in rows if any(row)]
 
-
 def _to_decimal(text: str) -> Decimal:
     try:
         return Decimal(text)
