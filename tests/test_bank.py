@@ -44,6 +44,7 @@ def test_process_applies_in_order_and_collects_failures(bank):
     assert failures[0][0] == bad
     assert isinstance(failures[0][1], InsufficientFundsError)
 
+
 def test_rejects_duplicate_account_numbers():
     with pytest.raises(DuplicateAccountError):
         Bank([Account(A, Decimal("5.00")), Account(A, Decimal("7.00"))])
