@@ -9,3 +9,6 @@ class InvalidAccountNumberError(ValueError):
 
 class InvalidTransferError(ValueError):
     """Raised when a transfer is malformed, e.g. to the same account."""
+
+class AccountNotFoundError(KeyError):
+    """Raised when a transfer names an account the bank doesn't hold."""

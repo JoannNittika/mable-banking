@@ -1,5 +1,4 @@
 from decimal import Decimal
-from idlelib import statusbar
 
 from mable.errors import InsufficientFundsError, InvalidAmountError, InvalidAccountNumberError
 
