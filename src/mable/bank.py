@@ -38,7 +38,7 @@ class Bank:
                 self.apply(transfer)
             except (AccountNotFoundError, InsufficientFundsError) as error:
                 failures.append((transfer, error))
-                self.failed_transfers.extend(failures)
+        self.failed_transfers.extend(failures)
         return failures
 
     def get_account(self, act_num: str)-> Account:

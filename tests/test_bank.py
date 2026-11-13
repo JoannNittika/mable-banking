@@ -47,3 +47,22 @@ def test_process_applies_in_order_and_collects_failures(bank):
 def test_rejects_duplicate_account_numbers():
     with pytest.raises(DuplicateAccountError):
         Bank([Account(A, Decimal("5.00")), Account(A, Decimal("7.00"))])
+
+def test_process_stores_completed_and_failed_transfers(bank):
+    ok = Transfer(A, B, Decimal("10.00"))
+    too_big = Transfer(B, A, Decimal("500.00"))
+    unknown = Transfer(A, "9999999999999999", Decimal("1.00"))
+
+    bank.process([ok, too_big, unknown])
+
+    assert bank.completed_transfers == [ok]
+    assert [transfer for transfer, _ in bank.failed_transfers] == [too_big, unknown]
+    assert isinstance(bank.failed_transfers[0][1], InsufficientFundsError)
+    assert isinstance(bank.failed_transfers[1][1], AccountNotFoundError)
+
+
+def test_failed_transfers_build_up_across_runs(bank):
+    bank.process([Transfer(B, A, Decimal("500.00"))])
+    bank.process([Transfer(B, A, Decimal("600.00"))])
+
+    assert len(bank.failed_transfers) == 2
