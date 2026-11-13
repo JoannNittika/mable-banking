@@ -8,19 +8,32 @@ def main(
     accounts_path: str | Path = "data/mable_account_balances.csv",
     transfers_path: str | Path = "data/mable_transactions.csv",
 ) -> None:
-    accounts = load_accounts(accounts_path)
-    bank = Bank(accounts)
-    bank.process(load_transfers(transfers_path))
+    try:
+        accounts = load_accounts(accounts_path)
+        bank = Bank(accounts)
+        transfers = load_transfers(transfers_path)
+    except (ValueError, LookupError) as error:
+        print(f"Error: {error}")
+        raise SystemExit(1) from None
+    bank.process(transfers)
 
-    print("Completed:")
-    for transfer in bank.completed_transfers:
-        print(" ", transfer)
-    print("Failed:")
-    for transfer, error in bank.failed_transfers:
-        print(" ", transfer, "->", error)
-    print("Final balances:")
-    for account in accounts:
-        print(f"  {account.act_num}: {account.balance:.2f}")
+    done, failed = bank.completed_transfers, bank.failed_transfers
+    print(f"Processed {len(done) + len(failed)} transfers: "
+          f"{len(done)} completed, {len(failed)} failed\n")
+
+    print("Completed transfers")
+    for t in done:
+        print(f"  {t}")
+
+    if failed:
+        print("\nFailed transfers")
+        for transfer, error in bank.failed_transfers:
+            print(f"  {transfer.from_acc} -> {transfer.to_acc} ${transfer.amount:,.2f}: {error}")
+
+    print("\nFinal balances")
+    print(f"  {'Account':<18}{'Balance':>14}")
+    for a in accounts:
+        print(f"  {a.act_num:<18}{a.balance:>14,.2f}")
 
 
 if __name__ == "__main__": # pragma: no cover
