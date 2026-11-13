@@ -1,8 +1,8 @@
 from decimal import Decimal
 
 from mable.account import Account
-from mable.transfer import Transfer
 from mable.errors import AccountNotFoundError, DuplicateAccountError, InsufficientFundsError
+from mable.transfer import Transfer
 
 
 class Bank:
@@ -18,17 +18,17 @@ class Bank:
             raise DuplicateAccountError(f"Account {account.act_num} appears more than once")
         self.accounts[account.act_num] = account
 
-    #Mainly used in testing
+    # Mainly used in testing
     def balance_of(self, number: str) -> Decimal:
-            return self.get_account(number).balance
+        return self.get_account(number).balance
 
     def apply(self, transfer: Transfer) -> None:
         src = self.get_account(transfer.from_acc)
         target = self.get_account(transfer.to_acc)
-        #Raises error when failed
+        # Raises error when failed
         src.withdraw(transfer.amount)
         target.deposit(transfer.amount)
-        #Only successful transactions with no errors raised is added to the list
+        # Only successful transactions with no errors raised is added to the list
         self.completed_transfers.append(transfer)
 
     def process(self, transfers: list[Transfer]) -> list[tuple[Transfer, Exception]] | None:
@@ -41,9 +41,9 @@ class Bank:
         self.failed_transfers.extend(failures)
         return failures
 
-    def get_account(self, act_num: str)-> Account:
+    def get_account(self, act_num: str) -> Account:
         try:
             return self.accounts[act_num]
-        except:
-            #Raises a clear banking error instead of a raw KeyError
+        except KeyError:
+            # Raises a clear banking error instead of a raw KeyError
             raise AccountNotFoundError(act_num) from None

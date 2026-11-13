@@ -3,6 +3,7 @@ from decimal import Decimal
 from mable.errors import InsufficientFundsError, InvalidAccountNumberError
 from mable.money import validate_money
 
+
 class Account:
     NUMBER_LENGTH = 16
 
@@ -12,7 +13,7 @@ class Account:
         self.act_num = act_num
         self.balance = balance
 
-    def deposit(self, amount: Decimal)-> None:
+    def deposit(self, amount: Decimal) -> None:
         self.validate_amount(amount)
         self.balance += amount
 
@@ -26,7 +27,11 @@ class Account:
 
     @classmethod
     def validate_number(cls, act_num: str) -> None:
-        if not isinstance(act_num, str) or len(act_num) != cls.NUMBER_LENGTH or not act_num.isdigit():
+        if (
+            not isinstance(act_num, str)
+            or len(act_num) != cls.NUMBER_LENGTH
+            or not act_num.isdigit()
+        ):
             raise InvalidAccountNumberError(
                 f"Account number must be {cls.NUMBER_LENGTH} digits, got {act_num!r}"
             )

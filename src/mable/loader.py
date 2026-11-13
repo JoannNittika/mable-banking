@@ -6,12 +6,14 @@ from mable.errors import InvalidAmountError
 from mable.transfer import Transfer
 
 
-
 def load_accounts(path) -> list[Account]:
     return [Account(act_num, _to_decimal(balance)) for act_num, balance in _read_rows(path)]
 
+
 def load_transfers(path) -> list[Transfer]:
-    return [Transfer(source, target, _to_decimal(amount)) for source, target, amount in _read_rows(path)]
+    return [
+        Transfer(source, target, _to_decimal(amount)) for source, target, amount in _read_rows(path)
+    ]
 
 
 def _read_rows(path) -> list[list[str]]:
