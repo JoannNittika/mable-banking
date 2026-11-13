@@ -12,3 +12,7 @@ testpaths = ["tests"]
 dev = [
     "pytest>=9.2.0",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

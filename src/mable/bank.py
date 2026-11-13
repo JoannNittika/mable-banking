@@ -11,6 +11,7 @@ class Bank:
         for account in accounts:
             self._add_account(account)
         self.completed_transfers: list[Transfer] = []
+        self.failed_transfers: list[tuple[Transfer, Exception]] = []
 
     def _add_account(self, account: Account) -> None:
         if account.act_num in self.accounts:
@@ -37,6 +38,7 @@ class Bank:
                 self.apply(transfer)
             except (AccountNotFoundError, InsufficientFundsError) as error:
                 failures.append((transfer, error))
+                self.failed_transfers.extend(failures)
         return failures
 
     def get_account(self, act_num: str)-> Account:
